@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './models/transaction.dart';
 import './widgets/transaction_item.dart';
+import './pages/add_item.dart';
 
 void main() => runApp(MyApp());
 
@@ -55,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text("Chart"),
                 ),
               ),
+              AddItem(),
               Column(
                 children: transactions.map((tx) {
                   return TransationItem(tx);
