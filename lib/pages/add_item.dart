@@ -3,6 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:personal_expenses/widgets/custom_textfield.dart';
 
 class AddItem extends StatelessWidget {
+  final TextEditingController titleController;
+  final TextEditingController amountController;
+  final Function onAddItem;
+
+  AddItem({this.titleController, this.amountController, this.onAddItem});
+  
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -22,9 +28,25 @@ class AddItem extends StatelessWidget {
               ),
             ),
             Container(height: 16.0),
-            CustomTextField("Enter Title"),
+            CustomTextField(
+              label: "Enter Title",
+              inputType: TextInputType.text,
+              controller: titleController,
+            ),
             Container(height: 16.0),
-            CustomTextField("Enter Price"),
+            CustomTextField(
+              label: "Enter Price",
+              inputType: TextInputType.number,
+              controller: amountController,
+            ),
+            Padding(
+              padding: EdgeInsets.all(16.0),
+            ),
+            MaterialButton(
+              child: Text('Add Transaction'),
+              textColor: Colors.purpleAccent,
+              onPressed: onAddItem,
+            ),
           ],
         ),
       ),
