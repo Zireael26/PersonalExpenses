@@ -9,6 +9,17 @@ class AddItem extends StatelessWidget {
 
   AddItem({this.titleController, this.amountController, this.onAddItem});
   
+  void submitForm() {
+    String titleText = titleController.text;
+    double amt = double.parse(amountController.text);
+
+    if(titleText.isEmpty || amt <= 0) {
+      return;
+    }
+
+    onAddItem();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -45,7 +56,7 @@ class AddItem extends StatelessWidget {
             MaterialButton(
               child: Text('Add Transaction'),
               textColor: Colors.purpleAccent,
-              onPressed: onAddItem,
+              onPressed: submitForm,
             ),
           ],
         ),
