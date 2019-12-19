@@ -4,8 +4,10 @@ class CustomTextField extends StatelessWidget {
   final String label;
   final TextInputType inputType;
   final TextEditingController controller;
+  final TextInputAction inputAction;
 
-  CustomTextField({this.label, this.inputType, this.controller});
+  CustomTextField(
+      {this.label, this.inputType, this.controller, this.inputAction});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class CustomTextField extends StatelessWidget {
       ),
       keyboardType: inputType,
       controller: controller,
+      textInputAction: inputAction != null ? inputAction : TextInputAction.done,
     );
   }
 }
