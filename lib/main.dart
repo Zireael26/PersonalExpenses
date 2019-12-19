@@ -30,20 +30,19 @@ class MyHomePage extends StatelessWidget {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-                width: MediaQuery.of(context).size.width,
-                child: Card(
-                  child: Text("Chart"),
-                ),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          // crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+              width: MediaQuery.of(context).size.width,
+              child: Card(
+                child: Text("Chart"),
               ),
-              UserTransactions(),              
-            ],
-          ),
+            ),
+            Expanded(child: UserTransactions()),
+          ],
         ),
       ),
     );

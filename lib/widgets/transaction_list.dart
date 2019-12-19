@@ -10,17 +10,14 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      child: ListView.builder(
-        itemBuilder: (BuildContext context, int index) {
-          return TransationItem(_transactions.elementAt(index));
-        },
-        itemCount: _transactions.length,
-        // children: _transactions.map((tx) {
-        //   return TransationItem(tx);
-        // }).toList(),
-      ),
+    return ListView.builder(
+      itemBuilder: (BuildContext context, int index) {
+        return TransationItem(_transactions.elementAt(index));
+      },
+      itemCount: _transactions.length,
+      // children: _transactions.map((tx) {
+      //   return TransationItem(tx);
+      // }).toList(),
     );
   }
 }

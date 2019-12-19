@@ -18,6 +18,8 @@ class AddItem extends StatelessWidget {
     }
 
     onAddItem();
+    titleController.text = "";
+    amountController.text = "";
   }
 
   @override

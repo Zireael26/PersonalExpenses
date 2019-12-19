@@ -46,7 +46,7 @@ class _UserTransactionsState extends State<UserTransactions> {
           amountController: amountController,
           onAddItem: addItem,
         ),
-        TransactionList(_transactions),
+        Expanded(child: TransactionList(_transactions)),
       ],
     );
   }
