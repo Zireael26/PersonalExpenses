@@ -19,13 +19,14 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
                 title: TextStyle(
-                  fontFamily: "OpenSans",
+                  fontFamily: "Quicksand",
                   fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
         ),
       ),
-      home: MyHomePage(title: 'Expenses App Home Page'),
+      home: MyHomePage(title: 'Expenses App'),
     );
   }
 }
@@ -43,12 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
 
-  final List<Transaction> _transactions = [
-    // Transaction(
-    //     id: 't1', title: 'New Shoes', amount: 69.99, date: DateTime.now()),
-    // Transaction(
-    //     id: 't2', title: 'Daily Groceries', amount: 16.53, date: DateTime.now())
-  ];
+  final List<Transaction> _transactions = [];
 
   List<Transaction> get recentTransactions {
     return _transactions.where(
@@ -60,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   int idCounter = 3;
 
-  void _addItem() {
+  void _addItem(DateTime date) {
     print(titleController.text);
     setState(() {
       _transactions.add(
@@ -68,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
           id: 't$idCounter',
           amount: double.parse(amountController.text),
           title: titleController.text,
-          date: DateTime.now(),
+          date: date,
         ),
       );
     });
@@ -87,6 +83,12 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      _transactions.removeWhere((tx) => id == tx.id);
+    });
   }
 
   @override
@@ -110,9 +112,14 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisSize: MainAxisSize.max,
           // crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Chart(recentTransactions: recentTransactions,),
+            Chart(
+              recentTransactions: recentTransactions,
+            ),
             Expanded(
-              child: TransactionList(_transactions),
+              child: TransactionList(
+                transactions: _transactions,
+                deleteTransaction: _deleteTransaction,
+              ),
             ),
           ],
         ),
@@ -125,6 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
           startAddNewTransaction(context);
         },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
