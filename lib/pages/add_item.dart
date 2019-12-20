@@ -36,7 +36,7 @@ class AddItem extends StatelessWidget {
             style: TextStyle(
               color: Colors.black,
               fontSize: 20.0,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.bold,  
             ),
           ),
           Container(height: 16.0),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'pages/add_item.dart';
-import 'models/transaction.dart';
-import 'widgets/transaction_list.dart';
+import './pages/add_item.dart';
+import './models/transaction.dart';
+import './widgets/transaction_list.dart';
+import './widgets/chart.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,7 +13,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Expenses App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.purple,
+        accentColor: Colors.amberAccent,
+        fontFamily: "Quicksand",
+        appBarTheme: AppBarTheme(
+          textTheme: ThemeData.light().textTheme.copyWith(
+                title: TextStyle(
+                  fontFamily: "OpenSans",
+                  fontSize: 20.0,
+                ),
+              ),
+        ),
       ),
       home: MyHomePage(title: 'Expenses App Home Page'),
     );
@@ -33,11 +44,19 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController amountController = TextEditingController();
 
   final List<Transaction> _transactions = [
-    Transaction(
-        id: 't1', title: 'New Shoes', amount: 69.99, date: DateTime.now()),
-    Transaction(
-        id: 't2', title: 'Daily Groceries', amount: 16.53, date: DateTime.now())
+    // Transaction(
+    //     id: 't1', title: 'New Shoes', amount: 69.99, date: DateTime.now()),
+    // Transaction(
+    //     id: 't2', title: 'Daily Groceries', amount: 16.53, date: DateTime.now())
   ];
+
+  List<Transaction> get recentTransactions {
+    return _transactions.where(
+      (Transaction tx) {
+        return tx.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
+      },
+    ).toList();
+  }
 
   int idCounter = 3;
 
@@ -91,13 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisSize: MainAxisSize.max,
           // crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-              width: MediaQuery.of(context).size.width,
-              child: Card(
-                child: Text("Chart"),
-              ),
-            ),
+            Chart(recentTransactions: recentTransactions,),
             Expanded(
               child: TransactionList(_transactions),
             ),
@@ -105,12 +118,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        label: Row(
-          children: <Widget>[
-            Icon(Icons.attach_money),
-            Text("Add an expense"),
-          ],
-        ),
+        label: Text("Add an expense"),
+        icon: Icon(Icons.attach_money),
         isExtended: true,
         onPressed: () {
           startAddNewTransaction(context);

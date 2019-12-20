@@ -31,7 +31,7 @@ class TransationItem extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.purple,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
               Column(
