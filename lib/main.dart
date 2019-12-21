@@ -43,7 +43,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
-
   final List<Transaction> _transactions = [];
 
   List<Transaction> get recentTransactions {
@@ -112,8 +111,11 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisSize: MainAxisSize.max,
           // crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Chart(
-              recentTransactions: recentTransactions,
+            Container(
+              height: MediaQuery.of(context).size.height * 0.30,
+              child: Chart(
+                recentTransactions: recentTransactions,
+              ),
             ),
             Expanded(
               child: TransactionList(
