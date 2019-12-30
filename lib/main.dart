@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import './pages/add_item.dart';
 import './models/transaction.dart';
 import './widgets/transaction_list.dart';
 import './widgets/chart.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  // ]);
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -44,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
   final List<Transaction> _transactions = [];
+  bool _showChart = true;
 
   List<Transaction> get recentTransactions {
     return _transactions.where(
@@ -92,6 +101,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+    final txListWidget = Expanded(
+      child: TransactionList(
+        transactions: _transactions,
+        deleteTransaction: _deleteTransaction,
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -111,18 +129,37 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisSize: MainAxisSize.max,
           // crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.height * 0.30,
-              child: Chart(
-                recentTransactions: recentTransactions,
+            if (isLandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text('Show Chart'),
+                  Switch(
+                    onChanged: (bool value) {
+                      setState(() {
+                        _showChart = value;
+                      });
+                    },
+                    value: _showChart,
+                  ),
+                ],
               ),
-            ),
-            Expanded(
-              child: TransactionList(
-                transactions: _transactions,
-                deleteTransaction: _deleteTransaction,
-              ),
-            ),
+              if (!isLandscape) Container(
+                      height: MediaQuery.of(context).size.height * 0.30,
+                      child: Chart(
+                        recentTransactions: recentTransactions,
+                      ),
+                    ),
+            if (!isLandscape) txListWidget,
+            if (isLandscape)
+              _showChart
+                  ? Container(
+                      height: MediaQuery.of(context).size.height * 0.60,
+                      child: Chart(
+                        recentTransactions: recentTransactions,
+                      ),
+                    )
+                  : txListWidget,
           ],
         ),
       ),
