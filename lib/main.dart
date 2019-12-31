@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import './pages/add_item.dart';
 import './models/transaction.dart';
@@ -82,6 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void startAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
+      useRootNavigator: true,
       context: ctx,
       builder: (BuildContext context) {
         return AddItem(
@@ -144,12 +144,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
-              if (!isLandscape) Container(
-                      height: MediaQuery.of(context).size.height * 0.30,
-                      child: Chart(
-                        recentTransactions: recentTransactions,
-                      ),
-                    ),
+            if (!isLandscape)
+              Container(
+                height: MediaQuery.of(context).size.height * 0.30,
+                child: Chart(
+                  recentTransactions: recentTransactions,
+                ),
+              ),
             if (!isLandscape) txListWidget,
             if (isLandscape)
               _showChart
@@ -163,15 +164,28 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        label: Text("Add an expense"),
-        icon: Icon(Icons.attach_money),
-        isExtended: true,
-        onPressed: () {
-          startAddNewTransaction(context);
-        },
+      floatingActionButton: MyFloatingActionButton(
+        onPressed: startAddNewTransaction,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
+  }
+}
+
+class MyFloatingActionButton extends StatelessWidget {
+  final Function onPressed;
+
+  MyFloatingActionButton({this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.extended(
+      label: Text("Add an expense"),
+      icon: Icon(Icons.attach_money),
+      isExtended: true,
+      onPressed: () {
+        onPressed(context);
+      },
     );
   }
 }

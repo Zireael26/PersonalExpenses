@@ -53,70 +53,80 @@ class _AddItemState extends State<AddItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(16.0),
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            "Add an expense",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Container(height: 16.0),
-          CustomTextField(
-            label: "Enter Title",
-            inputType: TextInputType.text,
-            controller: widget.titleController,
-            inputAction: TextInputAction.next,
-          ),
-          Container(height: 16.0),
-          CustomTextField(
-            label: "Enter Price",
-            inputType: TextInputType.number,
-            controller: widget.amountController,
-            inputAction: TextInputAction.done,
-          ),
-          Container(
-            height: 8.0,
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Text(_selectedDate == null
-                    ? "No Date Chosen!"
-                    : DateFormat.yMMMd().format(_selectedDate)),
-              ),
-              FlatButton(
-                child: Text(
-                  "Choose Date",
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontWeight: FontWeight.bold,
+    return DraggableScrollableSheet(
+      minChildSize: 1,
+      initialChildSize: 1,
+      builder: (BuildContext context, ScrollController scrollController) {
+        return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return Container(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: ListView(
+                
+                children: <Widget>[
+                  Text(
+                    "Add an expense",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                onPressed: _presentDatePicker,
+                  Container(height: 16.0),
+                  CustomTextField(
+                    label: "Enter Title",
+                    inputType: TextInputType.text,
+                    controller: widget.titleController,
+                    inputAction: TextInputAction.next,
+                  ),
+                  Container(height: 16.0),
+                  CustomTextField(
+                    label: "Enter Price",
+                    inputType: TextInputType.number,
+                    controller: widget.amountController,
+                    inputAction: TextInputAction.done,
+                  ),
+                  Container(
+                    height: 8.0,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(_selectedDate == null
+                            ? "No Date Chosen!"
+                            : DateFormat.yMMMd().format(_selectedDate)),
+                      ),
+                      FlatButton(
+                        child: Text(
+                          "Choose Date",
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        onPressed: _presentDatePicker,
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: 8.0,
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: RaisedButton(
+                      color: Theme.of(context).accentColor,
+                      child: Text('Add Transaction'),
+                      onPressed: _submitForm,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          Container(
-            height: 8.0,
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: RaisedButton(
-              color: Theme.of(context).accentColor,
-              child: Text('Add Transaction'),
-              onPressed: _submitForm,
-            ),
-          ),
-        ],
-      ),
+              margin: EdgeInsets.all(16.0),
+            );
+          },
+        );
+      },
     );
   }
 }
