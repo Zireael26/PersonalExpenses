@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import './pages/add_item.dart';
@@ -51,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
   final List<Transaction> _transactions = [];
-  bool _showChart = true;
+  bool _showChart = false;
 
   List<Transaction> get recentTransactions {
     return _transactions.where(
@@ -101,30 +104,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    final mediaQuery = MediaQuery.of(context);
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
     final txListWidget = Expanded(
       child: TransactionList(
         transactions: _transactions,
         deleteTransaction: _deleteTransaction,
       ),
     );
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              startAddNewTransaction(context);
-            },
-          ),
-        ],
-      ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
+    final pageBody = SafeArea(
+      child: Container(
+        width: mediaQuery.size.width,
+        height: mediaQuery.size.height,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           // crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -134,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text('Show Chart'),
-                  Switch(
+                  Switch.adaptive(
                     onChanged: (bool value) {
                       setState(() {
                         _showChart = value;
@@ -146,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             if (!isLandscape)
               Container(
-                height: MediaQuery.of(context).size.height * 0.30,
+                height: mediaQuery.size.height * 0.30,
                 child: Chart(
                   recentTransactions: recentTransactions,
                 ),
@@ -155,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
             if (isLandscape)
               _showChart
                   ? Container(
-                      height: MediaQuery.of(context).size.height * 0.60,
+                      height: mediaQuery.size.height * 0.60,
                       child: Chart(
                         recentTransactions: recentTransactions,
                       ),
@@ -164,11 +155,33 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: MyFloatingActionButton(
-        onPressed: startAddNewTransaction,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            child: pageBody,
+          )
+        : Scaffold(
+            appBar: AppBar(
+              title: Text(widget.title),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    startAddNewTransaction(context);
+                  },
+                ),
+              ],
+            ),
+            body: pageBody,
+            floatingActionButton: Platform.isIOS
+                ? Container()
+                : MyFloatingActionButton(
+                    onPressed: startAddNewTransaction,
+                  ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+          );
   }
 }
 

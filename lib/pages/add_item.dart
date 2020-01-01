@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:personal_expenses/widgets/custom_textfield.dart';
+import '../widgets/adaptive_button.dart';
+import '../widgets/custom_textfield.dart';
 
 class AddItem extends StatefulWidget {
   final TextEditingController titleController;
@@ -63,7 +64,6 @@ class _AddItemState extends State<AddItem> {
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: ListView(
-                
                 children: <Widget>[
                   Text(
                     "Add an expense",
@@ -97,16 +97,10 @@ class _AddItemState extends State<AddItem> {
                             ? "No Date Chosen!"
                             : DateFormat.yMMMd().format(_selectedDate)),
                       ),
-                      FlatButton(
-                        child: Text(
-                          "Choose Date",
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                      AdaptiveFlatButton(
+                        buttonText: "Choose Date",
                         onPressed: _presentDatePicker,
-                      ),
+                      )
                     ],
                   ),
                   Container(
