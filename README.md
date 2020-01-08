@@ -2,6 +2,14 @@
 
 An app made using Flutter to keep a track of perosnal expenses.
 
+<img src="/screenshots/port1.jpg" width="400">      <img src="/screenshots/port2.jpg" width="400">
+
+<img src="/screenshots/land1.jpg">
+
+<img src="/screenshots/land2.jpg">
+
+<img src="/screenshots/port3.jpg" width="400">
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
