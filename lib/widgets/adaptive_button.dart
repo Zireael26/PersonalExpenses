@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -14,7 +15,14 @@ class AdaptiveFlatButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Platform.isIOS
+    int platformCode = 0; // 1 is iPhone, 0 is non-iphone
+    if (kIsWeb) {
+      platformCode = 0;
+    } else if (Platform.isIOS) {
+      platformCode = 1;
+    }
+
+    return platformCode == 1
         ? CupertinoButton(
             child: Text(buttonText),
             onPressed: onPressed,

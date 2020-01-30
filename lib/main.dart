@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import './pages/add_item.dart';
@@ -104,6 +105,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    int platformCode = 0; // 1 is iPhone, 0 is non-iphone
+    if(kIsWeb) {
+      platformCode = 0;
+    } else if(Platform.isIOS) {
+      platformCode = 1;
+    }
+
     final mediaQuery = MediaQuery.of(context);
     final isLandscape = mediaQuery.orientation == Orientation.landscape;
     final txListWidget = Expanded(
@@ -113,52 +121,66 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
     final pageBody = SafeArea(
-      child: Container(
-        width: mediaQuery.size.width,
-        height: mediaQuery.size.height,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          // crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            if (isLandscape)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text('Show Chart'),
-                  Switch.adaptive(
-                    onChanged: (bool value) {
-                      setState(() {
-                        _showChart = value;
-                      });
-                    },
-                    value: _showChart,
-                  ),
-                ],
-              ),
-            if (!isLandscape)
-              Container(
-                height: mediaQuery.size.height * 0.30,
-                child: Chart(
-                  recentTransactions: recentTransactions,
+      child: Material(
+        child: Container(
+          width: mediaQuery.size.width,
+          height: mediaQuery.size.height,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            // crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              if (isLandscape)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Text('Show Chart'),
+                    Switch.adaptive(
+                      onChanged: (bool value) {
+                        setState(() {
+                          _showChart = value;
+                        });
+                      },
+                      value: _showChart,
+                    ),
+                  ],
                 ),
-              ),
-            if (!isLandscape) txListWidget,
-            if (isLandscape)
-              _showChart
-                  ? Container(
-                      height: mediaQuery.size.height * 0.60,
-                      child: Chart(
-                        recentTransactions: recentTransactions,
-                      ),
-                    )
-                  : txListWidget,
-          ],
+              if (!isLandscape)
+                Container(
+                  height: mediaQuery.size.height * 0.30,
+                  child: Chart(
+                    recentTransactions: recentTransactions,
+                  ),
+                ),
+              if (!isLandscape) txListWidget,
+              if (isLandscape)
+                _showChart
+                    ? Container(
+                        height: mediaQuery.size.height * 0.60,
+                        child: Chart(
+                          recentTransactions: recentTransactions,
+                        ),
+                      )
+                    : txListWidget,
+            ],
+          ),
         ),
       ),
     );
 
-    return Platform.isIOS
+    return platformCode == 1
         ? CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              middle: Text(
+                "Personal Expenses",
+                style: TextStyle(fontSize: 24.0),
+              ),
+              trailing: GestureDetector(
+                child: Icon(Icons.add),
+                onTap: () {
+                  startAddNewTransaction(context);
+                },
+              ),
+            ),
             child: pageBody,
           )
         : Scaffold(
@@ -174,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             body: pageBody,
-            floatingActionButton: Platform.isIOS
+            floatingActionButton: platformCode == 1
                 ? Container()
                 : MyFloatingActionButton(
                     onPressed: startAddNewTransaction,

@@ -5,58 +5,45 @@ import '../models/transaction.dart';
 
 class TransationItem extends StatelessWidget {
   final Transaction tx;
-  TransationItem(this.tx);
+  final Function deleteTransaction;
+
+
+  TransationItem({this.tx, this.deleteTransaction});
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.all(
-        Radius.circular(16.0),
-      ),
-      child: Card(
-        margin: EdgeInsets.all(8.0),
-        child: Container(
-          padding: EdgeInsets.only(top: 8.0, bottom: 8.0, right: 8.0),
-          child: Row(
-            children: <Widget>[
-              Container(
-                child: Text(
-                  '\$${tx.amount.toStringAsFixed(2)}',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Text(
-                    tx.title,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    DateFormat.yMMMd().format(tx.date),
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+    return Card(
+      elevation: 4.0,
+      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: ListTile(
+        leading: CircleAvatar(
+          radius: 32.0,
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: FittedBox(
+              child: Text('\$${tx.amount.toStringAsFixed(2)}'),
+            ),
           ),
         ),
+        title: Text(
+          tx.title,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          DateFormat.yMMMEd().format(tx.date).toString(),
+        ),
+        trailing: MediaQuery.of(context).size.width > 480
+            ? FlatButton.icon(
+                icon: const Icon(Icons.delete_forever),
+                label: const Text('Delete'),
+                onPressed: deleteTransaction,
+                textColor: Theme.of(context).primaryColor,
+              )
+            : IconButton(
+                icon: const Icon(Icons.delete_forever),
+                onPressed: deleteTransaction,
+                color: Theme.of(context).primaryColor,
+              ),
       ),
     );
   }

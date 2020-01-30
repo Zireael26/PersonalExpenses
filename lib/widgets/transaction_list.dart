@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:personal_expenses/widgets/transaction_item.dart';
 
 import '../models/transaction.dart';
 
@@ -30,46 +30,11 @@ class TransactionList extends StatelessWidget {
           )
         : ListView.builder(
             itemBuilder: (BuildContext context, int index) {
-              return Card(
-                elevation: 4.0,
-                margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    radius: 32.0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: FittedBox(
-                        child: Text(
-                            '\$${transactions[index].amount.toStringAsFixed(2)}'),
-                      ),
-                    ),
-                  ),
-                  title: Text(
-                    transactions[index].title,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(
-                    DateFormat.yMMMEd()
-                        .format(transactions[index].date)
-                        .toString(),
-                  ),
-                  trailing: MediaQuery.of(context).size.width > 480
-                      ? FlatButton.icon(
-                          icon: Icon(Icons.delete_forever),
-                          label: Text('Delete'),
-                          onPressed: () {
-                            deleteTransaction(transactions[index].id);
-                          },
-                          textColor: Theme.of(context).primaryColor,
-                        )
-                      : IconButton(
-                          icon: Icon(Icons.delete_forever),
-                          onPressed: () {
-                            deleteTransaction(transactions[index].id);
-                          },
-                          color: Theme.of(context).primaryColor,
-                        ),
-                ),
+              return TransationItem(
+                tx: transactions[index],
+                deleteTransaction: () {
+                  deleteTransaction(transactions[index].id);
+                },
               );
             },
             itemCount: transactions.length,
